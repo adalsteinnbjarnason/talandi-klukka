@@ -1,0 +1,97 @@
+/*
+	Usage:
+	<div class="wrapper">
+	  <div class="bg"> Gold </div>
+	  <div class="fg"> Gold </div>
+	</div>	
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --gold: #ffb338;
+  --light-shadow: #77571d;
+  --dark-shadow: #3e2904;
+}
+.wrapper {
+  /*background: radial-gradient(#272727, #1b1b1b);*/
+  display: grid;
+  grid-template-areas: 'overlap';
+  place-content: center;
+  text-transform: uppercase;
+  /*height: 100vh;*/
+}
+.wrapper > div {
+  background-clip: text;  
+  -webkit-background-clip: text;
+  color: #363833;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  /*font-size: clamp( 3em, 18vw, 15rem);*/
+  font-size: clamp( 1em, 3vw, 5rem);
+  grid-area: overlap;
+  letter-spacing: 1px;
+  -webkit-text-stroke: 4px transparent;
+}
+div.bg {
+  background-image: repeating-linear-gradient(105deg, var(--gold) 0%, var(--dark-shadow) 5%, var(--gold) 12%);
+  color: transparent;
+  filter: drop-shadow(5px 15px 15px gray);
+  transform: scaleY(1.05);
+  transform-origin: top;
+}
+div.fg{
+  /*background-image: repeating-linear-gradient(321deg, var(--gold) 0%, #ffad18 23%, var(--gold) 31%)*/
+  background-image: repeating-linear-gradient(5deg, var(--gold) 0%, var(--light-shadow) 23%, var(--gold) 31%);
+  color: #555555; /*#1e2127*/
+  transform: scale(1);
+}
+
+.block {
+  padding: 1em;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3em;
+}
+.golden-base {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  -webkit-margin-before: 0.3em; 
+  -webkit-margin-after: 0.2em;
+}
+.golden1 {
+  background-image: -webkit-linear-gradient(#FFF65C, #3A2C00);
+  text-shadow: -0.02em -0.03em 0.005em rgba(255, 223, 0, 0.60);
+}
+.golden2 {
+  background-image: -webkit-linear-gradient(#E8D800, #E0CF00 52%, #A86800 55%, #A86800 );
+  text-shadow: -0.02em -0.03em 0.005em rgba(255, 255, 0, 0.56);
+}
+.golden3 {
+  background-image: -webkit-linear-gradient(#FFF65C 45%, #9A8000 75%);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.09), -1px -1px 0 rgba(255, 220, 0, 0.670);
+  font-size: 2em;
+}
+
+.golden4 {
+    background: linear-gradient(to bottom, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #fff;
+    position: relative;
+    margin: 0;
+    font-size: 2em;
+}
+
+.ggolden3::after {
+    background: none;
+    content: attr(data-heading) / "";
+    left: 0;
+	top: 0;
+    z-index: -1;
+    position: absolute;
+    text-shadow: -1px 0 1px #c6bb9f, 0 1px 1px #c6bb9f, 5px 5px 10px rgba(0, 0, 0, 0.4), -5px -5px 10px rgba(0, 0, 0, 0.4);
+}
