@@ -17,7 +17,7 @@ Helstu eiginleikar eru:
 ## Hvernig get ég keyrt þetta
 
 * Hægt er að keyra html skrá beint.<br>
-https://raw.githack.com/adalsteinnbjarnason/talandi-klukka/main/talandi-klukka.html
+https://raw.githack.com/adalsteinnbjarnason/talandi-klukka/main/index.html
 * Einnig má sækja zip skrá verkefnisins yfir á tölvu, afpakka og keyra.<br>
 https://github.com/adalsteinnbjarnason/talandi-klukka/archive/refs/heads/main.zip
 
