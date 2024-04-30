@@ -1,11 +1,14 @@
 /*
 	Usage: 
 	------
-	<script language="javascript" type="text/javascript" src="timeToWords.js"></script>
-	<p class="small rise" id="clock-to-words"></p>
-	$('#clock-to-words').text(timeToWords(hours, minutes, true));
+	HTML head: <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+			   <script language="javascript" type="text/javascript" src="timeToWords.js"></script>
+	           <script>
+					$('#clock-to-words').text('Klukkan er tólf mínútur í ellefu');
+			   </script>
+	HTML body: <input class="customButton icon talk" type="button" value="" onclick="playitAll()" />
+			   <p id="clock-to-words"></p>
 */
-
 const map = new Map();
 map.set('eina', 'eina');
 map.set('eitt', 'eitt');
@@ -44,13 +47,21 @@ map.set('þrjátíu', 'thrjatiu');
 map.set('þrjú', 'thrju');
 
 
-function timeToWords(hours, minutes, nativeLang) {
-    if (nativeLang === true) {
+function timeToWords(hours, minutes, nativeLang = true) {
+	if (hours === undefined || minutes === undefined) {
+		throw new Error('Hours or minutes not numerical.');
+	}
+    
+	if (nativeLang === true) {
         return timeToWordsIS(hours, minutes);
     }
     else {
         return timeToWordsEN(hours, minutes);
     }
+}
+
+function timeToVoice(hours, minutes, nativeLang = true) {
+	playSentenceVocally(timeToWords(hours, minutes, nativeLang));
 }
 
 function timeToWordsEN(hours, minutes) {
@@ -124,7 +135,7 @@ function timeToWordsIS(hours, minutes) {
     let words = '';
     let hoursAdjusted = hours % 12;
     let hoursPlusOneAdjusted = (hours + 1) % 12;
-
+	
     if (hoursAdjusted === 0) {
         hoursAdjusted = 12;
     }
@@ -136,13 +147,14 @@ function timeToWordsIS(hours, minutes) {
         words += 'Klukkan er ' + numbersToWords[hoursAdjusted];
     }
     else {
-        if (minutes <= 30) {
+        if (minutes < 30) {
             var minutesCount = numbersToWords[minutes];
             if (minutes >= 1 && minutes <= 4) {
                 minutesCount = minutesToWords[minutes];
             }
             words += 'Klukkan er ' + minutesCount + ' mínútur yfir ' + numbersToWords[hoursAdjusted];
-        } else {
+        } 
+		else {
             var from60 = 60 - minutes;
 
             var minutesCount = numbersToWords[from60];
@@ -161,8 +173,8 @@ function timeToWordsIS(hours, minutes) {
     if (words.includes('fimmtán mínútur')) {
         words = words.replace('fimmtán mínútur', 'korter');
     }
-    else if (words.includes('þrjátíu mínútur yfir')) {
-        words = words.replace('þrjátíu mínútur yfir', 'hálf');
+    else if (words.includes('þrjátíu mínútur í')) {
+        words = words.replace('þrjátíu mínútur í', 'hálf');
     }
 
 	words += '.';
@@ -170,18 +182,15 @@ function timeToWordsIS(hours, minutes) {
     return words;
 }
 
-function playitAll() {
-	findAllMP3Files($('#clock-to-words').text());
-}
-
-function findAllMP3Files(sentence) {
+function playSentenceVocally(sentence) {
 	if (sentence && sentence.length > 0) {
 		sentence = sentence.replace(/\./g, '')
 		
 		var words = sentence.split(' ');
 		var hljodArray = [];
-		var baseFolder = 'resources/sound-files/';
+		var baseFolder = './resources/sound-files/';
 		
+		// Map necessary MP3 files to each word in the sentence.
 		hljodArray.push(`${baseFolder}${map.get('klukkan er')}.mp3`);
 		for (i=0; i<words.length; i++) {
 			var word = words[i];
@@ -193,17 +202,11 @@ function findAllMP3Files(sentence) {
 				hljodArray.push(`${baseFolder}${value}.mp3`);
 			}
 		}
-		playit(hljodArray);
+		playMP3FilesInSequence(hljodArray);
 	}
 }
 
-// html5 play mp3 files in sequence
-function playit(audionamesarray) {
-	// var audionnameslist = 'scres/one.mp3, scres/two.mp3';
-	// var audionamesarray = audionnameslist.split(',');
-	// var audio = new Audio('scres/one.mp3'); /*audionamesarray[0]*/
-	//var audio = new Audio();
-	
+function playMP3FilesInSequence(audionamesarray) {
 	if (audionamesarray && audionamesarray.length >= 0) {
 		var audio = new Audio(audionamesarray[0]);
 		audio.src = audionamesarray[0];
@@ -219,6 +222,3 @@ function playit(audionamesarray) {
 		};
 	}
 }
-
-/*
-*/

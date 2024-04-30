@@ -255,56 +255,33 @@
                 ctx.stroke();
             }
 
-            function drawSecondHand(milliseconds, seconds, color) {
-				var ang = toRadians((milliseconds * 0.006) + (seconds * 6));
-				
-				var path = sec_hand_path;
-				
-				ctx.save();
-				ctx.rotate(ang);
-				ctx.beginPath();
-				ctx.moveTo(path[0][0], path[0][1]);
-
-				for (i = 1; i < path.length; i++) {
-					ctx.lineTo(path[i][0], path[i][1]);
-				}
-				ctx.closePath();
-				ctx.fillStyle = color;
-				ctx.fill();
-				ctx.restore();
-
-				// secondsPivot
-				ctx.beginPath();
-				ctx.arc(0, 0, 8, 0, 6.2831); //2*pi
-				ctx.fillStyle = color;
-				ctx.fill();
-				ctx.closePath();
-			}
-			
-			function drawSecondHand(milliseconds, seconds, color) {
+			function drawSecondHand(milliseconds, seconds, color, manualClockOn) {
 				var shlength = (radius) - (jsps.size / 10);
 
                 ctx.save();
-                ctx.lineWidth = parseInt(jsps.size / 150, 10);
-                ctx.lineCap = "round";
-                ctx.strokeStyle = color;
+				
+				if (manualClockOn === false) {
+					ctx.lineWidth = parseInt(jsps.size / 150, 10);
+					ctx.lineCap = "round";
+					ctx.strokeStyle = color;
 
-                var ang = toRadians((milliseconds * 0.006) + (seconds * 6));
-				ctx.rotate(ang);
+					var ang = toRadians((milliseconds * 0.006) + (seconds * 6));
+					ctx.rotate(ang);
 
-                ctx.shadowColor = 'rgba(0,0,0,.5)';
-                ctx.shadowBlur = parseInt(jsps.size / 80, 10);
-                ctx.shadowOffsetX = parseInt(jsps.size / 200, 10);
-                ctx.shadowOffsetY = parseInt(jsps.size / 200, 10);
+					ctx.shadowColor = 'rgba(0,0,0,.5)';
+					ctx.shadowBlur = parseInt(jsps.size / 80, 10);
+					ctx.shadowOffsetX = parseInt(jsps.size / 200, 10);
+					ctx.shadowOffsetY = parseInt(jsps.size / 200, 10);
 
-                drawHand(shlength);
+					drawHand(shlength);
 
-                //tail of secondhand
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.lineTo(0, shlength / 15);
-                ctx.lineWidth = parseInt(jsps.size / 30, 10);
-                ctx.stroke();
+					//tail of secondhand
+					ctx.beginPath();
+					ctx.moveTo(0, 0);
+					ctx.lineTo(0, shlength / 15);
+					ctx.lineWidth = parseInt(jsps.size / 30, 10);
+					ctx.stroke();
+				}
 
                 //round center
                 ctx.beginPath();
@@ -389,8 +366,9 @@
 				globalDate = theDate;
 
 				mc = $('#manualClock').val();
+				var manualClockOn = false;
 
-				if (mc !== undefined) {
+				if (mc !== undefined && mc !== "") {
 					var hhmm = mc.split(':');
 					if (hhmm.length === 2) {
 						var hh = hhmm[0];
@@ -400,7 +378,9 @@
 							// theDate = new Date(2024, 12, 1, hh, mm, 1);
 							theDate.setHours(hh);
 							theDate.setMinutes(mm);
-							theDate.setSeconds(1);
+							theDate.setSeconds(0);
+							
+							manualClockOn = true;
 							
 							globalDate = theDate;
 							$(jsps).trigger('onEverySecond');
@@ -421,8 +401,8 @@
 
                 drawHourHand(h, jsps.hourHandColor);
                 drawMinuteHand(m, jsps.minuteHandColor);
-                drawSecondHand(ms, s, jsps.secondHandColor);
-
+				drawSecondHand(ms, s, jsps.secondHandColor, manualClockOn);
+				
                 //trigger every second custom event
                 if (y !== s) {
                     $(jsps).trigger('onEverySecond');

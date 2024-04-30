@@ -24,14 +24,10 @@ https://github.com/adalsteinnbjarnason/talandi-klukka/archive/refs/heads/main.zi
 ## Það sem á eftir að gera
 
 * Input time stýring
-  + Á að innihalda sömu litakóða og vísarnir í klukkunni.
   + Sýna bara 24 stunda ham.
-  + Fela sekúndur.
   + Stýring sést ekki í Android eða IOS.
 * Hliðræn sýn klukku
-  +  Fela sekúnduvísi í handvirkum ham.
   +  Laga reglulegt flökt á bakgrunni.
-  +  Sýna klukku í orðum í bakgrunni (sjá að neðan), helst í fleygboga.
   +  Síða þarf birtast rétt í Android eða IOS (bakgrunnur sést ekki).
 * Talgervill
   + 2:29 er réttilega sagt sem "Klukkan er tuttugu og níu mínútur yfir tvö.".<br>

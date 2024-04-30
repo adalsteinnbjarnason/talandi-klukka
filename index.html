@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script language="javascript" type="text/javascript" src="talandi-klukka.js"></script>
+	<script language="javascript" type="text/javascript" src="timi-yfir-i-ord.js"></script>
+	<link rel="stylesheet" href="gull.css"></link>
+    <script>
+        var magneaClock;
+		var oldTotalMinutes;
+
+        $(window).resize(function () {
+            window.location.reload()
+        });
+
+        $(document).ready(function () {
+		
+			//clock plugin constructor
+            $('#magneaClock').thooClock({
+                size: Math.min($(document).width(), $(document).height()) / 1.4,
+                sweepingMinutes: false,
+                sweepingSeconds: false,
+                showNumerals: true,
+                brandText: 'Magnea Líf',
+                brandText2: 'Reykjavík',
+                onEverySecond: function (globalDate) {
+					var theDate = globalDate;
+					var hours = theDate.getHours();
+					var minutes = theDate.getMinutes();
+					var seconds = theDate.getSeconds();
+					var hhPadded = String(hours).padStart(2, '0');
+					var mmPadded = String(minutes).padStart(2, '0');
+					var ssPadded = String(seconds).padStart(2, '0');
+
+					$('#digital-hh').text(hhPadded);
+					$('#digital-mm').text(mmPadded);
+					$('#digital-ss').text(ssPadded);
+					
+					$('#clock-to-words-hidden').text(timeToWords(hours, minutes, true));
+                }
+            });
+        });
+		
+		function writeTime() {
+			var sentence = $('#clock-to-words-hidden').text();
+			
+			$('#clock-to-words').fadeIn();
+			$('#clock-to-words').text(sentence);
+			$('#clock-to-words').fadeOut(5000);
+		}
+
+		function speakTime() {
+			var sentence = $('#clock-to-words-hidden').text();
+			playSentenceVocally(sentence);
+		}
+		
+		function getTimeArray() {
+			var hh = $('#digital-hh').text();
+			var mm = $('#digital-mm').text();
+			return [hh, mm];
+		}
+
+		
+		function onManualClockChange(control) {
+			var mc = control.value;
+			console.log('start: ' + mc);
+			
+			var hhmm = mc.split(':');
+			if (hhmm.length === 2) {
+				var hours = Number(hhmm[0]);
+				var minutes = Number(hhmm[1]);
+				
+				totalMinutes = (hours * 60) + minutes;
+				
+				if (oldTotalMinutes !== undefined && (minutes === 0 || minutes == 59)) {
+					var diffMinutes = totalMinutes - oldTotalMinutes;
+					var dirty = false;
+					if (diffMinutes === -59) {
+						hours++;
+						dirty = true;
+					}
+					else if (diffMinutes === 59) {
+						hours--;
+						dirty = true;
+					}					
+					
+					hours %= 24;
+					var hhPadded = String(hours).padStart(2, '0');
+					var mmPadded = String(minutes).padStart(2, '0');
+					mc = `${hhPadded}:${mmPadded}`;
+					
+					control.value = mc;
+					console.log('end: ' + mc);
+				}
+				
+				oldTotalMinutes = totalMinutes;
+			}
+		}
+		
+		function eraseManualClock() {
+			$('#manualClock').val('');
+		}
+    </script>
+
+    <style>
+        body {
+            text-align: center;
+            padding: 50px 0px 0px 0px;
+            margin: 0;
+            text-align: center;
+            text-rendering: optimizeLegibility;
+		}
+
+		.digclock {
+            font-family: 'digital';
+            font-weight: 900;
+            font-size: 50px;
+            margin: auto;
+		}
+        .digclock.hh {
+            color: #ff0000;
+        }
+        .digclock.mm {
+            color: #0000cc;
+        }
+        .digclock.ss {
+            color: #F3A829;
+        }
+		.digclock.sep {
+			color: #000000;
+		}
+
+        @font-face {
+            font-family: 'digital';
+            src: url('resources/digital-7-mono-italic.ttf');
+        }
+		
+		.customButton {
+			border: 0;
+			line-height: 1.8;
+			padding: 0 20px;
+			font-size: 2rem;
+			text-align: center;
+			color: #fff;
+			text-shadow: 1px 1px 1px #000;
+			border-radius: 10px;
+			background-color: rgb(220 0 0 / 100%);
+			background-image: 
+				linear-gradient(
+					to top left,
+					rgb(0 0 0 / 20%),
+					rgb(0 0 0 / 20%) 30%,
+					rgb(0 0 0 / 0%)
+				);
+			box-shadow:
+				inset 2px 2px 3px rgb(255 255 255 / 60%),
+				inset -2px -2px 3px rgb(0 0 0 / 60%);
+		}
+		
+		.customButton.icon {
+			margin: 0px 12px;
+			background-repeat: no-repeat;
+			background-position: center;
+			padding: 13px 40px;
+		}
+		
+		.customButton.icon.write {
+			background-image: url(resources/write64.png);
+			line-height: 0.6;
+			background-size: 40px;
+		}
+
+		.customButton.icon.talk {
+			background-image: url(resources/talk64.png);
+			line-height: 0.6;
+			background-size: 40px;
+		}
+
+		.customButton.icon.erase {
+			background-image: url(resources/erase64.png);
+			line-height: 1.2;
+			background-size: 40px;
+			vertical-align: bottom;
+		}
+		
+		.customButton:hover {
+			background-color: rgb(255 0 0 / 100%);
+		}
+		
+		.customButton:active {
+			box-shadow: 
+				inset -2px -2px 3px rgb(255 255 255 / 60%),
+				inset 2px 2px 3px rgb(0 0 0 / 60%);
+		}
+		
+		input[type=time]::-webkit-datetime-edit-hour-field {
+			color: #ff0000;
+		}
+
+		input[type=time]::-webkit-datetime-edit-minute-field {
+			color: #0000cc;
+		}		
+		</style>
+</head>
+<body>
+    <div>
+		<input id="manualClock" type="time" value="" class="digclock" step="60" onchange="onManualClockChange(this);" />
+		<input class="customButton icon erase" type="button" value=""  onclick="eraseManualClock()" />	
+	</div>
+
+	<div id="magneaClock"></div>
+
+	<div>
+		<span id="digital-hh"  class="digclock hh"></span>
+		<span id="digital-sep" class="digclock sep">:</span>
+		<span id="digital-mm"  class="digclock mm"></span>
+		<span id="digital-sep" class="digclock sep">:</span>
+		<span id="digital-ss"  class="digclock ss"></span>	
+		<input class="customButton icon write" type="button" value="" onclick="writeTime()" />
+		<input class="customButton icon talk" type="button" value="" onclick="speakTime()" />
+	</div>
+	
+	<div class="block">
+	  <p class="golden-base golden4" id="clock-to-words"></p>
+	<div>
+	
+	<input type="hidden" id="clock-to-words-hidden" name="clock-to-words-hidden" />
+</body>
+</html>

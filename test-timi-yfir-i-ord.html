@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<script language="javascript" type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script language="javascript" type="text/javascript" src="timi-yfir-i-ord.js"></script>
+	<style type="text/css">
+		* {
+			font-family: monospace;
+		}
+		
+		label {
+		  display: inline-block;
+		  width: 150px;
+		  text-align: right;
+		}
+	</style>
+	<script>
+		function writeTime() {
+			var ta = getTimeArray();
+			var sentence = timeToWords(ta[0], ta[1]);
+			$('#clock-to-words').text(sentence);
+		}
+		
+		function speakTime() {
+			var ta = getTimeArray();
+			timeToVoice(ta[0], ta[1]);
+		}
+		
+		function getTimeArray() {
+			let time = $('#time-selector').val();
+			let hhmm = time.split(':');
+			let hours;
+			let minutes;
+			if (hhmm.length === 2) {
+				hours = Number(hhmm[0]);
+				minutes = Number(hhmm[1]);
+			}
+			return [hours, minutes];
+		}
+	</script>
+</head>
+<body>
+	<div>
+		<label for="time-selector">Tími:</label>
+		<input type="time" id="time-selector" value="10:47" />
+		<input type="button" value="... í orðum" onclick="writeTime()" />
+		<input type="button" value="... upphátt" onclick="speakTime()" />
+	</div>
+	
+	<div style="padding-top: 10px">
+		<label for="clock-to-words">Klukkan í orðum:</label>
+		<span id="clock-to-words" style="color: red"></span>
+	</div>
+</body>
+</html>

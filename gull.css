@@ -62,21 +62,20 @@ div.fg{
   -webkit-margin-before: 0.3em; 
   -webkit-margin-after: 0.2em;
 }
-.golden1 {
+.golden-base.golden1 {
   background-image: -webkit-linear-gradient(#FFF65C, #3A2C00);
   text-shadow: -0.02em -0.03em 0.005em rgba(255, 223, 0, 0.60);
 }
-.golden2 {
+.golden-base.golden2 {
   background-image: -webkit-linear-gradient(#E8D800, #E0CF00 52%, #A86800 55%, #A86800 );
   text-shadow: -0.02em -0.03em 0.005em rgba(255, 255, 0, 0.56);
 }
-.golden3 {
+.golden-base.golden3 {
   background-image: -webkit-linear-gradient(#FFF65C 45%, #9A8000 75%);
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.09), -1px -1px 0 rgba(255, 220, 0, 0.670);
   font-size: 2em;
 }
-
-.golden4 {
+.golden-base.golden4 {
     background: linear-gradient(to bottom, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -84,14 +83,4 @@ div.fg{
     position: relative;
     margin: 0;
     font-size: 2em;
-}
-
-.ggolden3::after {
-    background: none;
-    content: attr(data-heading) / "";
-    left: 0;
-	top: 0;
-    z-index: -1;
-    position: absolute;
-    text-shadow: -1px 0 1px #c6bb9f, 0 1px 1px #c6bb9f, 5px 5px 10px rgba(0, 0, 0, 0.4), -5px -5px 10px rgba(0, 0, 0, 0.4);
 }
